@@ -1,5 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const session = require("express-session");
 const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
@@ -24,21 +25,40 @@ const passportConfig = (app) => {
     async function(username, password, done) {
       try {
         const user = await User.findOne({ username: username });
-        console.log(user);
 
         // Incorrect username
         if (!user) {
-          return done(null, false);
+          return done(null, false, {message: 'Incorrect username'});
         }
+
         const isPasswordMatch = await user.comparePassword(password);
         // Incorrect password
         if (!isPasswordMatch) {
-          return done(null, false);
+          return done(null, false, {message: 'Incorrect password'});
         }
+
+        // auth succeeded
         return done(null, user);
+
       } catch (err) {
         console.log(err);
         return done(err);
+      }
+    }
+  ));
+
+  passport.use(new FacebookStrategy({
+      clientID: process.env.FACEBOOK_APP_ID,
+      clientSecret: process.env.FACEBOOK_APP_SECRET,
+      callbackURL: '/api/login-facebook-callback',
+      profileFields: ['id', 'emails', 'name']
+    },
+    async function(accessToken, refreshToken, profile, done) {
+      try {
+        const user = await User.handleSSOSignIn('facebook', profile.id, profile.emails[0].value, `${profile.name.givenName} ${profile.name.familyName}`);
+        done(null, user);
+      } catch (e) {
+        done(e, false);
       }
     }
   ));

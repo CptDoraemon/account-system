@@ -6,9 +6,11 @@ const saltRounds = 10;
 const UserSchema = new Schema({
   email: { type: String, required: true },
   username: { type: String, required: true },
-  password: { type: String, required: true },
+  password: String,
   createdAt: { type: Date, default: Date.now() },
   isAdmin: { type: Boolean, default: false },
+  provider: { type: String, default: 'local' },
+  providerId: Number
 });
 
 UserSchema.pre('save', async function(next) {
@@ -37,6 +39,37 @@ UserSchema.methods.comparePassword = function(candidatePassword) {
     });
   });
 };
+
+UserSchema.static(
+  'handleSSOSignIn',
+  function(provider, providerId, email, username) {
+    // find user by provider and providerId
+    // create user if not existed
+    const User = this;
+    return new Promise(async (resolve, reject) => {
+      try {
+        const user = await User.findOne({
+          provider,
+          providerId
+        }).exec();
+        if (user) {
+          return resolve(user)
+        } else {
+          const user = new User({
+            username,
+            email,
+            provider,
+            providerId
+          });
+          const createdUser = await user.save();
+          return resolve(createdUser)
+        }
+      } catch (e) {
+        reject(e)
+      }
+    });
+  }
+);
 
 const User = mongoose.model('User', UserSchema);
 

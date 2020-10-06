@@ -1,84 +1,32 @@
 const express = require('express');
 const app = express();
-const passport = require('passport');
 const passportConfig = require('./passport-config');
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 require('dotenv').config();
+const errorHandler = require('./error/error-handler');
 
-const User = require('./models/user');
+// import routes
+const login = require('./routes/login');
+const loginFacebook = require('./routes/login-facebook');
+const register = require('./routes/register');
+const logout = require('./routes/logout');
+const landingPage = require('./routes/landing-page');
+// import routes end
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-(async() => {
-  try {
-    await mongoose.connect(process.env.DATABASE, {useNewUrlParser: true, useUnifiedTopology: true});
-    passportConfig(app);
+mongoose.connect(process.env.DATABASE, {useNewUrlParser: true, useUnifiedTopology: true});
+passportConfig(app);
 
-    app.post('/api/login',
-      passport.authenticate('local', {
-        successRedirect: '/api/auth-succeeded',
-        failureRedirect: '/api/auth-failed'
-      }));
-
-    app.get('/api/auth-succeeded', (req, res) => {
-      res.json({
-        message: 'ok'
-      })
-    });
-
-    app.get('/api/auth-failed', (req, res) => {
-      res.status(401).json({
-        message: 'failed'
-      })
-    });
-
-    app.get('/login', (req, res) => {
-      res.send('login')
-    });
-
-    app.get('/', (req, res) => {
-      const user = req.user;
-      if (user) {
-        res.send(`Welcome, ${user.username}`)
-      } else {
-        res.send('Welcome, please login')
-      }
-    });
-
-    app.post('/api/register', async (req, res) => {
-      try {
-        const username = req.body.username;
-        const email = req.body.email;
-        const password = req.body.password;
-
-        const user = new User({
-          username,
-          email,
-          password
-        });
-        await user.save();
-
-        res.json({
-          message: 'ok'
-        })
-      } catch (e) {
-        console.log(e)
-      }
-    });
-
-    app.get('/api/logout', (req, res) => {
-      req.logout();
-      res.json({
-        message: 'ok'
-      })
-    });
-
-  } catch (e) {
-    console.log(e)
-  }
-})();
+app.use(errorHandler);
+landingPage(app, '/');
+login(app, '/api/login');
+loginFacebook.loginFacebook(app, '/api/login-facebook');
+loginFacebook.loginFacebookCallback(app, '/api/login-facebook-callback');
+register(app, '/api/register');
+logout(app, '/api/logout');
 
 const port = process.env.PORT || 5000;
 app.listen(port);
