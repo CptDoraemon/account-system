@@ -67,17 +67,17 @@ app.use(bodyParser.json());
         console.log(e)
       }
     });
+
+    app.get('/api/logout', (req, res) => {
+      req.logout();
+      res.json({
+        message: 'ok'
+      })
+    });
+
   } catch (e) {
     console.log(e)
   }
-
-  app.get('/api/logout', (req, res) => {
-    req.logout();
-    res.json({
-      message: 'ok'
-    })
-  });
-
 })();
 
 const port = process.env.PORT || 5000;
