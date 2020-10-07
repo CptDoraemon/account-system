@@ -55,6 +55,7 @@ const passportConfig = (app) => {
     },
     async function(accessToken, refreshToken, profile, done) {
       try {
+        console.log(accessToken);
         const user = await User.handleSSOSignIn('facebook', profile.id, profile.emails[0].value, `${profile.name.givenName} ${profile.name.familyName}`);
         done(null, user);
       } catch (e) {
