@@ -10,7 +10,9 @@ const useGet = <DataType,>(
   const [errorMessage, setErrorMessage] = useState('');
   const [data, setData] = useState<DataType | null>(null);
 
-  const doGet = async () => {
+  const doGet = async (
+    callbackOnSuccess?: () => void,
+  ) => {
     try {
       if (loading) return;
 
@@ -25,7 +27,10 @@ const useGet = <DataType,>(
       // server responded
       setLoading(false);
       if (res.status >= 200 && res.status < 300) {
-        setData(data)
+        setData(data);
+        if (callbackOnSuccess) {
+          callbackOnSuccess()
+        }
       } else {
         setErrorMessage(GENERIC_ERROR_MESSAGE)
       }

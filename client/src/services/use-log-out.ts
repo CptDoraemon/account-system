@@ -1,26 +1,24 @@
-import usePost from "./helpers/use-post";
 import urls from "./urls";
+import useGet from "./helpers/use-get";
 import useFlushLoginAndRedirectToHome from "./use-flush-login-and-redirect-to-home";
 
-const useLogin = () => {
+const useLogout = () => {
   const {
     loading,
     errorMessage,
-    doPost
-  } = usePost(urls.login);
+    doGet
+  } = useGet(urls.logout);
   const flushLoginAndRedirectToHome = useFlushLoginAndRedirectToHome();
 
-  const submitForm = (
-    body: any,
-  ) => {
-    doPost(body, flushLoginAndRedirectToHome)
+  const logout = () => {
+    doGet(flushLoginAndRedirectToHome)
   };
 
   return {
     loading,
     errorMessage,
-    submitForm
+    logout
   }
 };
 
-export default useLogin
+export default useLogout

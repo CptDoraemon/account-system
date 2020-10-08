@@ -1,25 +1,40 @@
-import React from "react";
+import React, {useContext} from "react";
 import {routes} from "../App";
 import {Link} from "react-router-dom";
-import {AppBar, Button, IconButton, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Box, Button, IconButton, Toolbar, Typography} from "@material-ui/core";
 import HomeIcon from '@material-ui/icons/Home';
 import {makeStyles} from "@material-ui/core/styles";
 import clsx from 'clsx';
-import {useAccountContext} from "../services/account-context";
+import AccountContext from "../services/account-context";
+import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 const useStyles = makeStyles(theme => ({
-  title: {
-    flex: 1
+  toolbar: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  },
+  buttonGroup: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end'
   },
   buttonLogIn: {
-    color: theme.palette.secondary.contrastText,
-    '& :hover': {
-
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main,
+    '&:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.2)'
     }
   },
   buttonSignUp: {
     backgroundColor: theme.palette.secondary.main,
     color: theme.palette.secondary.contrastText,
+    '&:hover': {
+      backgroundColor: lighten(theme.palette.secondary.main, 0.4),
+    }
   },
   button: {
     margin: theme.spacing(0, 1),
@@ -29,25 +44,29 @@ const useStyles = makeStyles(theme => ({
 
 const Header: React.FC = () => {
   const classes = useStyles();
-  const accountContext = useAccountContext();
+  const accountState = useContext(AccountContext);
 
   return (
     <AppBar position="static" elevation={0}>
-      <Toolbar>
-        <IconButton edge="start"  color="inherit" aria-label="menu">
+      <Toolbar className={classes.toolbar}>
+        <IconButton edge="start" color="inherit" aria-label="home" component={Link} to={routes.home}>
           <HomeIcon />
+          <Typography variant="h6">
+            <Box mx={1}>
+              Account System Demo
+            </Box>
+          </Typography>
         </IconButton>
-        <Typography variant="h6" className={classes.title}>
-          Account System Demo
-        </Typography>
-        {
-          accountContext.isLogin ?
-            <Button className={clsx(classes.buttonSignUp, classes.button)}>Logout</Button> :
-            <>
-              <Button className={clsx(classes.buttonLogIn, classes.button)} component={Link} to={routes.login}>Log in</Button>
-              <Button className={clsx(classes.buttonSignUp, classes.button)} component={Link} to={routes.signUp}>Sign up</Button>
-            </>
-        }
+        <div className={classes.buttonGroup}>
+          {
+            accountState.isLogin ?
+              <Button className={clsx(classes.buttonSignUp, classes.button)} component={Link} to={routes.logOut}>Logout</Button> :
+              <>
+                <Button className={clsx(classes.buttonLogIn, classes.button)} component={Link} to={routes.login}>Log in</Button>
+                <Button className={clsx(classes.buttonSignUp, classes.button)} component={Link} to={routes.signUp}>Sign up</Button>
+              </>
+          }
+        </div>
       </Toolbar>
     </AppBar>
   )

@@ -1,6 +1,6 @@
 import usePost from "./helpers/use-post";
 import urls from "./urls";
-import useRedirectToHome from "./helpers/use-redirect-home";
+import useFlushLoginAndRedirectToHome from "./use-flush-login-and-redirect-to-home";
 
 const useSignUp = () => {
   const {
@@ -8,12 +8,12 @@ const useSignUp = () => {
     errorMessage,
     doPost
   } = usePost(urls.signUp);
-  const toHome = useRedirectToHome();
+  const flushLoginAndRedirectToHome = useFlushLoginAndRedirectToHome();
 
   const submitForm = (
     body: any,
   ) => {
-    doPost(body, toHome)
+    doPost(body, flushLoginAndRedirectToHome)
   };
 
   return {

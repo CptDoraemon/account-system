@@ -20,9 +20,9 @@ interface LandingPageProps {
 
 const LandingPage: React.FC<LandingPageProps> = () => {
   const classes = useStyles();
-  const accountInfo = useContext(AccountContext);
+  const accountState = useContext(AccountContext);
 
-  if (!accountInfo.hasInit) {
+  if (accountState.loading) {
     return (
       <div className={classes.root}>
         <CircularProgress />
@@ -32,7 +32,7 @@ const LandingPage: React.FC<LandingPageProps> = () => {
     return (
       <div className={classes.root}>
         {
-          `Welcome, ${accountInfo.isLogin ? accountInfo.username : 'please login or sign up'}`
+          `Welcome, ${accountState.isLogin ? accountState.username : 'please login or sign up'}`
         }
       </div>
     )

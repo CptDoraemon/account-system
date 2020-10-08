@@ -4,6 +4,7 @@ import {Button, TextField} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import useStyles from "./styles";
 import useLogin from "../../services/use-log-in";
+import FacebookLogin from "./facebook-login";
 
 interface LoginProps {
 
@@ -41,6 +42,7 @@ const Login: React.FC<LoginProps> = () => {
       <div className={classes.message}>
         {errorMessage && errorMessage}
       </div>
+      <FacebookLogin></FacebookLogin>
     </form>
   )
 };
