@@ -3,6 +3,7 @@ const app = express();
 const passportConfig = require('./passport-config');
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
+const path = require('path');
 require('dotenv').config();
 const cors = require('cors');
 const errorHandler = require('./error/error-handler');
@@ -26,6 +27,7 @@ app.use(bodyParser.json());
 mongoose.connect(process.env.DATABASE, {useNewUrlParser: true, useUnifiedTopology: true});
 passportConfig(app);
 
+app.use(express.static(path.join(__dirname, 'client/build')));
 landingPage(app, '/');
 login(app, '/api/login');
 verifyLogin(app, '/api/verify-login');
@@ -33,6 +35,8 @@ loginFacebook.loginFacebook(app, '/api/login-facebook');
 loginFacebook.loginFacebookCallback(app, '/api/login-facebook-callback');
 register(app, '/api/register');
 logout(app, '/api/logout');
+
+landingPage(app, '*');
 
 app.use(errorHandler);
 const port = process.env.PORT || 5000;

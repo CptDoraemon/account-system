@@ -2,7 +2,8 @@ const urls = {
   verifyLogin: '/api/verify-login',
   signUp: '/api/register',
   login: '/api/login',
-  logout: '/api/logout'
+  logout: '/api/logout',
+  loginFacebook: '/api/login-facebook'
 };
 
 if (process.env.REACT_APP_DEBUG === 'true') {

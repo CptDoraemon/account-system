@@ -22,13 +22,16 @@ const passportConfig = (app) => {
       usernameField: 'email',
       passwordField: 'password'
     },
-    async function(username, password, done) {
+    async function(email, password, done) {
       try {
-        const user = await User.findOne({ username: username });
+        const user = await User.findOne({
+          email: email,
+          provider: 'local'
+        });
 
         // Incorrect username
         if (!user) {
-          return done(null, false, {message: 'Incorrect username'});
+          return done(null, false, {message: 'Incorrect email'});
         }
 
         const isPasswordMatch = await user.comparePassword(password);

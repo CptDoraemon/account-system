@@ -18,9 +18,7 @@ function authenticate(req, res, next) {
     }
     req.logIn(user, function(err) {
       if (err) { return next(err); }
-      return res.json({
-        message: 'ok'
-      })
+      return res.redirect('/')
     });
   })(req, res, next);
 }

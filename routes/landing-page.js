@@ -1,11 +1,8 @@
+const path = require('path');
+
 const landingPage = (app, route) => {
   app.get(route, (req, res) => {
-    const user = req.user;
-    if (user) {
-      res.send(`Welcome, ${user.username}`)
-    } else {
-      res.send('Welcome, please login')
-    }
+    res.sendFile(path.join(process.cwd(), '/client/build/index.html'));
   });
 };
 
