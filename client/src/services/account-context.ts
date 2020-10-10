@@ -24,7 +24,9 @@ export const useAccountContext = () => {
     errorMessage,
     data,
     doGet
-  } = useGet(urls.verifyLogin);
+  } = useGet<{
+    username: string
+  }>(urls.verifyLogin);
 
   const isLogin = !errorMessage && data;
   const username = data ? data.username : '';
@@ -38,7 +40,7 @@ export const useAccountContext = () => {
     isLogin,
     username,
     verifyLogin: doGet
-  }
+  } as IAccountContext
 };
 
 // export const useAccountContext = () => {

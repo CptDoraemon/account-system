@@ -30,7 +30,8 @@ const useStyles = makeStyles(theme => ({
     }
   },
   message: {
-    minHeight: '1rem'
+    color: theme.palette.error.main,
+    fontWeight: 700
   }
 }));
 

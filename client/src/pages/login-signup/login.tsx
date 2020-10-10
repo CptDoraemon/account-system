@@ -40,9 +40,10 @@ const Login: React.FC<LoginProps> = () => {
         Submit
       </Button>
       <div className={classes.message}>
+        &nbsp;
         {errorMessage && errorMessage}
       </div>
-      <FacebookLogin></FacebookLogin>
+      <FacebookLogin/>
     </form>
   )
 };

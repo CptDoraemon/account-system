@@ -4,6 +4,7 @@ import {Button, TextField} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import useSignUp from "../../services/use-sign-up";
 import useStyles from "./styles";
+import FacebookLogin from "./facebook-login";
 
 interface SignUpProps {
 
@@ -42,8 +43,10 @@ const SignUp: React.FC<SignUpProps> = () => {
         Submit
       </Button>
       <div className={classes.message}>
+        &nbsp;
         {errorMessage && errorMessage}
       </div>
+      <FacebookLogin/>
     </form>
   )
 };
