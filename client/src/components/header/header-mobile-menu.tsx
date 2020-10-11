@@ -33,8 +33,8 @@ const HeaderMobileMenu: React.FC<HeaderMobileMenuProps> = ({isOpen, toggleDrawer
         className={classes.root}
         onClick={toggleDrawer}
       >
-        <ListItem button alignItems={'center'} aria-label={'close menu'}>
-          <ListItemIcon><CloseIcon/></ListItemIcon>
+        <ListItem button style={{justifyContent: 'flex-end'}} aria-label={'close menu'}>
+          <ListItemIcon style={{minWidth: 'auto'}}><CloseIcon/></ListItemIcon>
         </ListItem>
         {
           menuItems.map(menuItem => (
