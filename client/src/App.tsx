@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import RouterScrollRestoration from "./router-scroll-restoration";
 import LandingPageContainer from "./pages/landing-page";
-import Header from "./components/header";
+import Header from "./components/header/header";
 import {CssBaseline} from "@material-ui/core";
 import {ThemeProvider} from '@material-ui/core/styles';
 import theme from "./theme";
